@@ -1,0 +1,27 @@
+@import './normalize.css';
+
+*,
+*::before,
+*::after{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root{
+  --color-text:#666;
+  --color-hight-text:#ff5777;
+  --color-tint:#ff8198;
+  --color-background:#fff;
+  --font-size:14px;
+  --line-height:1.5;
+}
+
+body{
+  width: 100vw;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+a{
+  color: var(--color-text);
+  text-decoration: none;
+}
