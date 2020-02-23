@@ -8,6 +8,7 @@
 
 <script>
 import navBar from "@/components/common/navbar";
+import { getHomeMultidata } from "@/network/home.js";
 export default {
   name: "home",
   components: { navBar },
@@ -18,7 +19,12 @@ export default {
   watch: {},
   computed: {},
   methods: {},
-  created() {},
+  created() {
+    window.console.log("345677888");
+    getHomeMultidata().then(res => {
+      window.console.log(res, "99999999999");
+    });
+  },
   mounted() {}
 };
 </script>
