@@ -122,7 +122,7 @@ import {
   featureView
 } from "@/views/home/childe/index.js";
 
-import { getHomeMultidata } from "@/network/home.js";
+import { getHomeMultidata, getHomeGoods } from "@/network/home.js";
 
 export default {
   name: "home",
@@ -143,6 +143,9 @@ export default {
       this.banner = res.data.banner.list;
       this.recommend = res.data.recommend.list;
       window.console.log(res, "99999999999");
+    });
+    getHomeGoods("pop", 1).then(res => {
+      window.console.log(res, "88888888889");
     });
   },
   mounted() {}
