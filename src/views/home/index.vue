@@ -5,19 +5,128 @@
     </navBar>
     <homeSwiper :banner="banner" />
     <recommendView :recommend="recommend" />
+    <featureView />
+    <tabControl class="tab-control" :titles="['流行', '新款', '精选']" />
+    <ul>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
   </div>
 </template>
 
 <script>
 import navBar from "@/components/common/navbar";
+import tabControl from "@/components/content/tabControl";
 
-import { homeSwiper, recommendView } from "@/views/home/childe/index.js";
+import {
+  homeSwiper,
+  recommendView,
+  featureView
+} from "@/views/home/childe/index.js";
 
 import { getHomeMultidata } from "@/network/home.js";
 
 export default {
   name: "home",
-  components: { navBar, homeSwiper, recommendView },
+  components: { navBar, homeSwiper, recommendView, featureView, tabControl },
   props: {},
   data() {
     return {
@@ -50,6 +159,11 @@ export default {
     right: 0;
     top: 0;
     z-index: 9;
+  }
+  // 实现吸顶的效果
+  .tab-control {
+    position: sticky;
+    top: 44px;
   }
 }
 </style>
