@@ -97,8 +97,6 @@ export default {
           this.currentType = "sell";
           break;
       }
-      this.getHomeGoodsList(this.currentType);
-      // window.console.log(index);
     },
 
     /**
@@ -157,6 +155,8 @@ export default {
   created() {
     this.getBannerAndRecommendData();
     this.getHomeGoodsList("pop");
+    this.getHomeGoodsList("new");
+    this.getHomeGoodsList("sell");
   },
   mounted() {}
 };
