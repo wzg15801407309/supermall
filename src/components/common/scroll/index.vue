@@ -32,8 +32,8 @@ export default {
     scrollTo(x, y, time = 300) {
       this.scroll.scrollTo(x, y, time);
     },
-    finishPullingUp() {
-      this.scroll.finishPullingUp();
+    finishPullUp() {
+      this.scroll.finishPullUp();
     }
   },
   created() {},

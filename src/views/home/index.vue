@@ -128,7 +128,7 @@ export default {
         }
 
         this.goods[type].page += 1;
-        this.$refs.scroll.finishPullingUp();
+        this.$refs.scroll.finishPullUp();
       });
     },
 
