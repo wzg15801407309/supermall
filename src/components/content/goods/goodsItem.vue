@@ -67,8 +67,7 @@ export default {
         top: -1px;
         width: 14px;
         height: 14px;
-        background: url("../../../assets/img/tabbar/act_liebiaohengxiang_fill.svg")
-          0 0/14px 14px;
+        background: url("/assets/commom/xingxing.png") 0 0/14px 14px;
       }
     }
   }
