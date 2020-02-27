@@ -2,7 +2,7 @@
   <Swiper>
     <SwiperItem v-for="(item, index) in banner" :key="index">
       <a :href="item.link">
-        <img :src="item.image" />
+        <img :src="item.image"  @load="imageLoad"/>
       </a>
     </SwiperItem>
   </Swiper>
@@ -25,11 +25,23 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      //只要有一张图片加载完成就能获取到高度
+      isLoad:false
+    };
   },
   watch: {},
   computed: {},
-  methods: {},
+  methods: {
+    imageLoad(){
+      if(!this.isLoad)
+      {
+        this.$emit('swiperImageLoad');
+        this.isLoad=true;
+      }
+
+    }
+  },
   created() {},
   mounted() {}
 };
