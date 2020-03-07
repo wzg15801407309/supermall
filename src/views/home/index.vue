@@ -133,7 +133,8 @@ export default {
             title: `${type}列表${i + 1}我测试的数据`,
             src: this.srcList[srcNum],
             price: ram * 10,
-            cfav: getRandomNum(10, 50)
+            cfav: getRandomNum(10, 50),
+            iid:this.goods[type].list.length+i
           });
         }
 
