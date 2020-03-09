@@ -3,27 +3,32 @@
     <navBar class="home-nav">
       <div slot="nav-center">购物街</div>
     </navBar>
-     <tabControl :titles="['流行', '新款', '精选']"
-                  @tabClick="tabClick" 
-                  ref='taContorl1'
-                  class="tabZindex" 
-                  v-show="isTabFixed"/>
-    <scroll class="scroll-content"
-            ref='scroll'
-            :probeType='3'
-            :pullUpLoad='true'
-            @scrollPosition='contralScroll'
-            @pullingUp='loadingMove'>
-      <homeSwiper :banner="banner" @swiperImageLoad='swiperImageLoad' />
+    <tabControl
+      :titles="['流行', '新款', '精选']"
+      @tabClick="tabClick"
+      ref="taContorl1"
+      class="tabZindex"
+      v-show="isTabFixed"
+    />
+    <scroll
+      class="scroll-content"
+      ref="scroll"
+      :probeType="3"
+      :pullUpLoad="true"
+      @scrollPosition="contralScroll"
+      @pullingUp="loadingMove"
+    >
+      <homeSwiper :banner="banner" @swiperImageLoad="swiperImageLoad" />
       <recommendView :recommend="recommend" />
       <featureView />
-      <tabControl :titles="['流行', '新款', '精选']"
-                  @tabClick="tabClick" 
-                  ref='taContorl2'/>
+      <tabControl
+        :titles="['流行', '新款', '精选']"
+        @tabClick="tabClick"
+        ref="taContorl2"
+      />
       <goodsList :goodsList="showGoods" />
     </scroll>
-    <backTop @click.native="backClick"
-             v-show="ishowTop " />
+    <backTop @click.native="backClick" v-show="ishowTop" />
   </div>
 </template>
 
@@ -41,7 +46,8 @@ import {
 import goodsList from "@/components/content/goods";
 
 import { getHomeMultidata, getHomeGoods } from "@/network/home.js";
-import { getRandomNum, debounce } from "@/commons/utils.js";
+import { getRandomNum } from "@/commons/utils.js";
+import { itemListerMixin } from "@/commons/mixins.js";
 
 export default {
   name: "home",
@@ -78,11 +84,12 @@ export default {
       },
       currentType: "pop",
       ishowTop: false,
-      tabOffsetTop:0,
-      isTabFixed:false,
-      saveY:0
+      tabOffsetTop: 0,
+      isTabFixed: false,
+      saveY: 0
     };
   },
+  mixins: [itemListerMixin],
   watch: {},
   computed: {
     showGoods() {
@@ -105,8 +112,8 @@ export default {
           this.currentType = "sell";
           break;
       }
-      this.$refs.taContorl1.currentIndex=index;
-      this.$refs.taContorl2.currentIndex=index;
+      this.$refs.taContorl1.currentIndex = index;
+      this.$refs.taContorl2.currentIndex = index;
     },
 
     /**
@@ -134,7 +141,7 @@ export default {
             src: this.srcList[srcNum],
             price: ram * 10,
             cfav: getRandomNum(10, 50),
-            iid:this.goods[type].list.length+i
+            iid: this.goods[type].list.length + i
           });
         }
 
@@ -167,9 +174,9 @@ export default {
     },
     // /**
     //  * 防抖函数的实现：主要是让加载的图片刷新没有那么频繁
-    //  * 参数一：要执行的函数回调 
+    //  * 参数一：要执行的函数回调
     //  * 参数二：回调时间
-    //  * 
+    //  *
     //  * 函数放到一个js文件中以后的项目可以用
     //  */
     // debounce(fn,wait){
@@ -182,10 +189,10 @@ export default {
     //     },wait);
     //   }
     // }
-    swiperImageLoad(){
+    swiperImageLoad() {
       //获取到taContorl 距离顶部的距离：offestTop
       //$el是组件的一个属性，让其拿到元素（Dom对象）
-      this.tabOffsetTop=this.$refs.taContorl2.$el.offsetTop;
+      this.tabOffsetTop = this.$refs.taContorl2.$el.offsetTop;
       // console.log(this.tabOffsetTop,"tabOffsetTop");
     }
   },
@@ -203,24 +210,28 @@ export default {
   },
   mounted() {
     //监听goodsitem中图片是否加载完成
-    const refresh=debounce(this.$refs.scroll.refresh,20);
-    this.$bus.$on('itemImageLoad',()=>{
-      refresh();
-    });
+    // const refresh = debounce(this.$refs.scroll.refresh, 20);
+    // this.itemImgListener = () => {
+    //   refresh();
+    // };
+    // this.$bus.$on("itemImageLoad", this.itemImgListener);
   },
   /**
    * activated,deactivated这两个生命周期函数一定是要在使用了keep-alive组件后才会有的，否则则不存在
    */
-  activated(){
+  activated() {
     // console.log('activated');
     //回来时设置滚动的y值
-    this.$refs.scroll.scrollTo(0,this.saveY,0);
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
     this.$refs.scroll.refresh();
   },
-  deactivated(){
+  deactivated() {
     // console.log('deactivated');
     //离开时保存滚动的距离
-    this.saveY=this.$refs.scroll.getScrollY();
+    this.saveY = this.$refs.scroll.getScrollY();
+
+    //离开的时候 取消全局的事件监听
+    this.$bus.$off("itemImageLoad", this.itemImgListener);
   }
 };
 </script>
@@ -246,7 +257,7 @@ export default {
   //   // top: 44px;
   //   // z-index: 9;
   // }
-  .tabZindex{
+  .tabZindex {
     position: relative;
     z-index: 9;
   }
@@ -259,11 +270,11 @@ export default {
     right: 0;
   }
 }
-  .fixed{
-    position:fixed;
-    left: 0;
-    right: 0;
-    top:44px;
-    z-index: 9;
-  }
+.fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 44px;
+  z-index: 9;
+}
 </style>

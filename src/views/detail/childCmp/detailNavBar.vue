@@ -38,6 +38,7 @@ export default {
   methods: {
     itemClick(index) {
       this.currentIndex = index;
+      this.$emit("titleClick", index);
     },
     backClick() {
       //两个都是回到上一页

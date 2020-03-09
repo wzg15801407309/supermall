@@ -6,6 +6,12 @@ export function getDetailData(iid) {
     params: iid
   });
 }
+//推荐数据
+export function getDetailRecomment() {
+  return request({
+    url: "/recommend"
+  });
+}
 export class Goods {
   constructor(itemInfo, columns, services) {
     this.title = itemInfo.title;

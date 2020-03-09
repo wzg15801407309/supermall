@@ -1,12 +1,14 @@
 <template>
   <div id="detail">
-    <detailNavBar class="detail-nav" />
+    <detailNavBar class="detail-nav" @titleClick="titleClick" />
     <Scroll class="scroll-content" ref="scroll">
       <detailSwiper :topImages="topImages" />
       <detailBaseInfo :goods="goods" />
       <detailShopInfo :shop="shop" />
       <detailGoodsInfo :detailInfo="detailInfo" @imgLoad="imgLoad" />
-      <detailParamInfo :paramInfo="paramInfo" />
+      <detailParamInfo :paramInfo="paramInfo" ref="param" />
+      <detailCommentInfo :commentInfo="commentInfo" ref="comment" />
+      <goodsList :goodsList="recomment" ref="recomment" />
     </Scroll>
   </div>
 </template>
@@ -93,16 +95,57 @@ const rule = {
     ["衣长", "54", "55", "56", "57"]
   ]
 };
-import { getDetailData, Goods, Shop, GoodsParam } from "@/network/detail.js";
+const comment = {
+  cRate: 125,
+  Ilist: {
+    canExplain: false,
+    conten: "刚好合适，物美价廉，穿着舒服，版型好看，非常棒",
+    created: "",
+    explain: "颜色分类：米白[现货]  尺码：M码",
+    user: {
+      avatar:
+        "https://wwc.alicdn.com/avatar/getAvatar.do?userId=2816685380&width=160&height=160&type=sns",
+      uname: "wzg冰凌花的花期"
+    },
+    content:
+      "每天都看快递跟踪，期待早点看到！终于收到了，果然就像收到了一份礼物一样！袖子里面加了一层是为了防止刺绣扎，但是我觉得如果身上也加一层就更加完美了！虽然料子不算薄，但毕竟是白色系，对了，不是纯白是米白棉麻，非常满意！袖子上的绣花太好看了，收到才发现袖口绣花颜色还不一样，小惊喜！生活中的小确幸！",
+    images: [
+      "https://img.alicdn.com/imgextra/i1/0/O1CN01YWSpAm1Nq0DF0yz7P_!!0-rate.jpg_40x40.jpg",
+      "https://img.alicdn.com/imgextra/i3/0/O1CN01ogmiKc1Nq0DI1s4CM_!!0-rate.jpg_40x40.jpg",
+      "https://img.alicdn.com/imgextra/i4/0/O1CN01mO7mQF1Nq0DIZVX8G_!!0-rate.jpg_40x40.jpg"
+    ]
+  }
+};
+const srcList = [
+  "https://s11.mogucdn.com/mlcdn/c45406/190729_0l0228189805b58i45056ckihc917_1000x1500.jpg_468x468.jpg",
+  "https://s11.mogucdn.com/mlcdn/c45406/190729_0l0228189805b58i45056ckihc917_1000x1500.jpg_468x468.jpg",
+  "https://s11.mogucdn.com/mlcdn/c45406/190304_298j17ee3efhg82649ef6f1ca049l_1000x1500.jpg_468x468.jpg",
+  "https://s5.mogucdn.com/mlcdn/c45406/190807_682kbcl4917hah9ehjef06b073489_640x960.jpg_468x468.jpg",
+  "https://s5.mogucdn.com/mlcdn/c45406/190807_682kbcl4917hah9ehjef06b073489_640x960.jpg_468x468.jpg",
+  "https://s5.mogucdn.com/mlcdn/c45406/190320_35ggb3f6i4k36l1hf5bgefh6e468i_640x960.jpg_468x468.jpg",
+  "https://s5.mogucdn.com/mlcdn/c45406/190806_5kj89cck1fj2efb76iad4eb7a2g4d_1000x1500.jpg_468x468.jpg",
+  "https://s5.mogucdn.com/mlcdn/c45406/190806_5kj89cck1fj2efb76iad4eb7a2g4d_1000x1500.jpg_468x468.jpg"
+];
+import {
+  getDetailData,
+  Goods,
+  getDetailRecomment,
+  Shop,
+  GoodsParam
+} from "@/network/detail.js";
+import { getRandomNum, debounce } from "@/commons/utils.js";
+import { itemListerMixin } from "@/commons/mixins.js";
 import {
   detailNavBar,
   detailSwiper,
   detailBaseInfo,
   detailShopInfo,
   detailGoodsInfo,
-  detailParamInfo
+  detailParamInfo,
+  detailCommentInfo
 } from "./childCmp/index";
 import Scroll from "@/components/common/scroll";
+import goodsList from "@/components/content/goods";
 export default {
   name: "detail",
   components: {
@@ -112,7 +155,9 @@ export default {
     detailShopInfo,
     detailGoodsInfo,
     detailParamInfo,
-    Scroll
+    detailCommentInfo,
+    Scroll,
+    goodsList
   },
   props: {},
   data() {
@@ -123,9 +168,14 @@ export default {
       goods: {},
       shop: {},
       detailInfo: {},
-      paramInfo: {}
+      paramInfo: {},
+      commentInfo: {},
+      recomment: [],
+      themeTopYs: [],
+      getThemeTopY: null
     };
   },
+  mixins: [itemListerMixin],
   created() {
     //ijw0sr2
     //保存商品id
@@ -156,18 +206,76 @@ export default {
         ]
       };
       this.paramInfo = new GoodsParam(info, rule);
+      //评论信息
+      if (comment.cRate != 0) {
+        this.commentInfo = comment.Ilist;
+      }
+      //推荐数据
+      getDetailRecomment().then(res => {
+        console.log(res, "000");
+        let ram = getRandomNum(15, 25);
+        for (let i = 0; i < ram; i++) {
+          // console.log(ram);
+          let srcNum = getRandomNum(0, 7);
+          this.recomment.push({
+            title: `列表${i + 1}我测试的数据`,
+            src: srcList[srcNum],
+            price: ram * 10,
+            cfav: getRandomNum(10, 50),
+            iid: this.recomment.length + i
+          });
+        }
+        // console.log(this.recomment, "??????");
+      });
+      this.getThemeTopY = debounce(() => {
+        this.themeTopYs = [];
+        this.themeTopYs.push(0);
+
+        this.themeTopYs.push(this.$refs.param.$el.offsetTop);
+        this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+        this.themeTopYs.push(this.$refs.recomment.$el.offsetTop);
+      }, 100);
+      /**
+       * 这个函数就是上面的数据渲染完了（dom），但是不包括图片是否加载完成
+       */
+      //   this.$nextTick(() => {
+      //     this.themeTopYs = [];
+      //     this.themeTopYs.push(0);
+
+      //     this.themeTopYs.push(this.$refs.param.$el.offsetTop);
+      //     this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
+      //     this.themeTopYs.push(this.$refs.recomment.$el.offsetTop);
+      //   });
+      //   console.log(this.themeTopYs);
     });
   },
-  mounted() {},
+  mounted() {
+    //监听goodsitem中图片是否加载完成
+    // const refresh = debounce(this.$refs.scroll.refresh, 20);
+    // this.itemImgListener = () => {
+    //   refresh();
+    // };
+    // this.$bus.$on("itemImageLoad", this.itemImgListener);
+  },
   update() {},
   beforeRouteUpdate() {},
   methods: {
     imgLoad() {
-      this.$refs.scroll.refresh();
+      // this.$refs.scroll.refresh();
+      this.newRefresh();
+      this.getThemeTopY();
+    },
+    titleClick(index) {
+      // console.log(index);
+      this.$refs.scroll.scrollTo(0, -this.themeTopYs[index] + 44, 200);
     }
   },
   computed: {},
-  watch: {}
+  watch: {},
+  destroyed() {
+    //离开的时候 取消全局的事件监听
+    this.$bus.$off("itemImageLoad", this.itemImgListener);
+  }
 };
 </script>
 
