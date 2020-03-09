@@ -5,6 +5,7 @@ import detailShopInfo from "./detailShopInfo.vue";
 import detailGoodsInfo from "./detailGoodsInfo.vue";
 import detailParamInfo from "./detailParamInfo.vue";
 import detailCommentInfo from "./detailCommentInfo.vue";
+import detailBottomBar from "./detailBottomBar.vue";
 export {
   detailNavBar,
   detailSwiper,
@@ -12,5 +13,6 @@ export {
   detailShopInfo,
   detailGoodsInfo,
   detailParamInfo,
-  detailCommentInfo
+  detailCommentInfo,
+  detailBottomBar
 };

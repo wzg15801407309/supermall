@@ -16,3 +16,17 @@ export const itemListerMixin = {
     this.$bus.$on("itemImageLoad", this.itemImgListener);
   }
 };
+import backTop from "@/components/content/backTop";
+export const backTopMixin = {
+  data() {
+    return {
+      ishowTop: false
+    };
+  },
+  components: { backTop },
+  methods: {
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0, 300);
+    }
+  }
+};

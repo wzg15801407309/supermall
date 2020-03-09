@@ -36,7 +36,7 @@
 import navBar from "@/components/common/navbar";
 import tabControl from "@/components/content/tabControl";
 import scroll from "@/components/common/scroll";
-import backTop from "@/components/content/backTop";
+// import backTop from "@/components/content/backTop";
 
 import {
   homeSwiper,
@@ -47,7 +47,7 @@ import goodsList from "@/components/content/goods";
 
 import { getHomeMultidata, getHomeGoods } from "@/network/home.js";
 import { getRandomNum } from "@/commons/utils.js";
-import { itemListerMixin } from "@/commons/mixins.js";
+import { itemListerMixin, backTopMixin } from "@/commons/mixins.js";
 
 export default {
   name: "home",
@@ -58,8 +58,8 @@ export default {
     recommendView,
     featureView,
     tabControl,
-    scroll,
-    backTop
+    scroll
+    // backTop
   },
   props: {},
   data() {
@@ -83,13 +83,13 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      ishowTop: false,
+      // ishowTop: false,
       tabOffsetTop: 0,
       isTabFixed: false,
       saveY: 0
     };
   },
-  mixins: [itemListerMixin],
+  mixins: [itemListerMixin, backTopMixin],
   watch: {},
   computed: {
     showGoods() {
@@ -150,14 +150,14 @@ export default {
       });
     },
 
-    /**
-     * 回到顶部
-     * ref的使用和组件监听事件添加native
-     */
-    backClick() {
-      // console.log("9909000");
-      this.$refs.scroll.scrollTo(0, 0);
-    },
+    // /**
+    //  * 回到顶部
+    //  * ref的使用和组件监听事件添加native
+    //  */
+    // backClick() {
+    //   // console.log("9909000");
+    //   this.$refs.scroll.scrollTo(0, 0);
+    // },
     /**位置相关 */
     contralScroll(position) {
       //监听的是backTop(回到顶部按钮)是否显示

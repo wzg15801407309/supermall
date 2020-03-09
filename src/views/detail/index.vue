@@ -1,7 +1,12 @@
 <template>
   <div id="detail">
-    <detailNavBar class="detail-nav" @titleClick="titleClick" />
-    <Scroll class="scroll-content" ref="scroll">
+    <detailNavBar class="detail-nav" @titleClick="titleClick" ref="nav" />
+    <Scroll
+      class="scroll-content"
+      ref="scroll"
+      @scrollPosition="contentScroll"
+      :probeType="3"
+    >
       <detailSwiper :topImages="topImages" />
       <detailBaseInfo :goods="goods" />
       <detailShopInfo :shop="shop" />
@@ -10,6 +15,8 @@
       <detailCommentInfo :commentInfo="commentInfo" ref="comment" />
       <goodsList :goodsList="recomment" ref="recomment" />
     </Scroll>
+    <detailBottomBar @addEvent="addEvent" />
+    <backTop @click.native="backClick" v-show="ishowTop" />
   </div>
 </template>
 
@@ -134,7 +141,7 @@ import {
   GoodsParam
 } from "@/network/detail.js";
 import { getRandomNum, debounce } from "@/commons/utils.js";
-import { itemListerMixin } from "@/commons/mixins.js";
+import { itemListerMixin, backTopMixin } from "@/commons/mixins.js";
 import {
   detailNavBar,
   detailSwiper,
@@ -142,7 +149,8 @@ import {
   detailShopInfo,
   detailGoodsInfo,
   detailParamInfo,
-  detailCommentInfo
+  detailCommentInfo,
+  detailBottomBar
 } from "./childCmp/index";
 import Scroll from "@/components/common/scroll";
 import goodsList from "@/components/content/goods";
@@ -156,6 +164,7 @@ export default {
     detailGoodsInfo,
     detailParamInfo,
     detailCommentInfo,
+    detailBottomBar,
     Scroll,
     goodsList
   },
@@ -172,10 +181,11 @@ export default {
       commentInfo: {},
       recomment: [],
       themeTopYs: [],
-      getThemeTopY: null
+      getThemeTopY: null,
+      currentIndex: 0
     };
   },
-  mixins: [itemListerMixin],
+  mixins: [itemListerMixin, backTopMixin],
   created() {
     //ijw0sr2
     //保存商品id
@@ -268,6 +278,40 @@ export default {
     titleClick(index) {
       // console.log(index);
       this.$refs.scroll.scrollTo(0, -this.themeTopYs[index] + 44, 200);
+    },
+    contentScroll(position) {
+      // console.log(position);
+      this.ishowTop = -position.y > 800;
+      const positionY = -position.y + 44;
+      let length = this.themeTopYs.length;
+      // console.log(positionY);
+      for (let i = 0; i < length; i++) {
+        if (this.currentIndex !== i) {
+          if (
+            (i < length - 1 &&
+              positionY >= this.themeTopYs[i] &&
+              positionY < this.themeTopYs[i + 1]) ||
+            (i === length - 1 && positionY >= this.themeTopYs[i])
+          ) {
+            this.currentIndex = i;
+            this.$refs.nav.currentIndex = this.currentIndex;
+            // console.log(this.currentIndex);
+          }
+        }
+      }
+    },
+    addEvent() {
+      //商品数据
+      const product = {};
+      product.images = this.topImages[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+
+      //将商品添加到购物车里
+
+      console.log("///////");
     }
   },
   computed: {},
@@ -286,7 +330,7 @@ export default {
   background-color: #fff;
   height: 100vh;
   .scroll-content {
-    height: calc(100% - 44px);
+    height: calc(100% - 93px);
   }
   .detail-nav {
     position: relative;
