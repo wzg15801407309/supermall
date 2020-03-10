@@ -66,6 +66,6 @@ export default {
   }
 }
 .active {
-  color: var(--color-height-text);
+  color: var(--color-high-text);
 }
 </style>

@@ -15,7 +15,7 @@
       <detailCommentInfo :commentInfo="commentInfo" ref="comment" />
       <goodsList :goodsList="recomment" ref="recomment" />
     </Scroll>
-    <detailBottomBar @addEvent="addEvent" />
+    <detailBottomBar @addEvent="addToCart" />
     <backTop @click.native="backClick" v-show="ishowTop" />
   </div>
 </template>
@@ -34,6 +34,7 @@ const itemInfo = {
   desc: "2020年春茶上市，抢鲜预售中",
   price: "¥1024",
   oldPrice: "¥2024",
+  lowNowPrice: "¥2024",
   disCountDesc: "活动价"
 };
 const columns = ["销量 1580", "收藏33人", "退货补差价"];
@@ -68,7 +69,7 @@ const shopInfos = {
   ]
 };
 const info = {
-  anchor: "product_info",
+  anchor: "obj_info",
   key: "商品参数",
   set: [
     { key: "图案", value: "宫廷复古/名族复古图，字母/文字" },
@@ -300,18 +301,25 @@ export default {
         }
       }
     },
-    addEvent() {
+    addToCart() {
+      //把信息发送到vuex里
       //商品数据
-      const product = {};
-      product.images = this.topImages[0];
-      product.title = this.goods.title;
-      product.desc = this.goods.desc;
-      product.price = this.goods.realPrice;
-      product.iid = this.iid;
-
-      //将商品添加到购物车里
-
-      console.log("///////");
+      const obj = {};
+      obj.images = this.topImages[0];
+      obj.title = this.goods.title;
+      obj.desc = this.goods.desc;
+      obj.price = this.goods.realPrice;
+      obj.iid = this.iid;
+      this.$store
+        .dispatch("ChangeCart", obj)
+        .then(() => {
+          console.log("加入购物车");
+          // this.$toast.show("加入购物车");
+        })
+        .catch(() => {
+          console.log("购买数量+1");
+          // this.$toast.show("购买数量+1");
+        });
     }
   },
   computed: {},

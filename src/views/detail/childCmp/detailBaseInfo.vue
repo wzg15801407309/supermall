@@ -61,7 +61,7 @@ export default {
     margin-top: 10px;
     .n-price {
       font-size: 24px;
-      color: var(--color-height-text);
+      color: var(--color-high-text);
       margin-left: 5px;
       // text-decoration: line-through;
     }
@@ -74,7 +74,7 @@ export default {
       font-size: 12px;
       padding: 2px 5px;
       color: #fff;
-      background-color: var(--color-height-text);
+      background-color: var(--color-high-text);
       border-radius: 8px;
       margin-left: 5px;
 

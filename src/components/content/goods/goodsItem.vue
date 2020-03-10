@@ -1,10 +1,10 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="goodsitem.src" @load='imageLoad'>
+    <img :src="goodsitem.src" @load="imageLoad" />
     <div class="goods-info">
-      <p>{{goodsitem.title}}</p>
-      <span class="price">{{goodsitem.price}}</span>
-      <span class="collect">{{goodsitem.cfav}}</span>
+      <p>{{ goodsitem.title }}</p>
+      <span class="price">{{ goodsitem.price }}</span>
+      <span class="collect">{{ goodsitem.cfav }}</span>
     </div>
   </div>
 </template>
@@ -27,13 +27,13 @@ export default {
   watch: {},
   computed: {},
   methods: {
-    imageLoad(){
-      this.$bus.$emit('itemImageLoad');
+    imageLoad() {
+      this.$bus.$emit("itemImageLoad");
       // console.log('0000');
     },
-    itemClick(){
+    itemClick() {
       // console.log('详情页面');
-      this.$router.push('/detail/'+ this.goodsitem.iid);
+      this.$router.push("/detail/" + this.goodsitem.iid);
     }
   },
   created() {},
@@ -64,7 +64,7 @@ export default {
       margin-bottom: 3px;
     }
     .price {
-      color: var(--color-height-text);
+      color: var(--color-high-text);
       margin-right: 20px;
     }
     .collect {
