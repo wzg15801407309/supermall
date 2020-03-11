@@ -57,6 +57,7 @@ export default {
       } else {
         //====>购买界面，确认信息
         console.log("购买界面，确认信息");
+        this.$toast.show("购买界面，确认信息");
       }
     }
   }

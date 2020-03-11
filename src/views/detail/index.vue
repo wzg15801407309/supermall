@@ -313,12 +313,12 @@ export default {
       this.$store
         .dispatch("ChangeCart", obj)
         .then(() => {
-          console.log("加入购物车");
-          // this.$toast.show("加入购物车");
+          // console.log("加入购物车");
+          this.$toast.show("加入购物车");
         })
         .catch(() => {
-          console.log("购买数量+1");
-          // this.$toast.show("购买数量+1");
+          // console.log("购买数量+1");
+          this.$toast.show("购买数量+1");
         });
     }
   },
