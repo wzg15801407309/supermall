@@ -1,28 +1,28 @@
 <template>
-  <div id="detail_params" v-if="Object.keys(paramInfo).length != 0">
-    <table class="params_rule">
-      <tbody>
-        <tr v-for="(item, index) in paramInfo.sizes" :key="index">
-          <th>{{ item[0] }}</th>
-          <td v-for="(td_item, td_index) in item.length - 1" :key="td_index">
-            {{ item[td_item] }}
-          </td>
-        </tr>
-      </tbody>
+  <div class="param-info" v-if="Object.keys(paramInfo).length !== 0">
+    <table
+      v-for="(table, index) in paramInfo.sizes"
+      class="info-size"
+      :key="index"
+    >
+      <tr v-for="(tr, indey) in table" :key="indey">
+        <td v-for="(td, indez) in tr" :key="indez">{{ td }}</td>
+      </tr>
     </table>
-    <table class="params_set">
-      <tbody>
-        <tr v-for="(item, index) in paramInfo.infos" :key="index">
-          <th>{{ item.key }}</th>
-          <td>{{ item.value }}</td>
-        </tr>
-      </tbody>
+
+    <table class="info-param">
+      <tr v-for="(info, index) in paramInfo.infos" :key="index">
+        <td class="info-param-key">{{ info.key }}</td>
+        <td class="param-value">{{ info.value }}</td>
+      </tr>
     </table>
-    <div class="info_img" v-if="paramInfo.image != ''">
+
+    <div class="info-img" v-if="paramInfo.image.length !== 0">
       <img :src="paramInfo.image" alt="" />
     </div>
   </div>
 </template>
+
 <script>
 export default {
   props: {
@@ -35,41 +35,37 @@ export default {
   }
 };
 </script>
-<style>
-#detail_params {
-  font-size: 0.65rem;
-  padding: 0.42rem 0.34rem;
-  border-bottom: 0.3rem solid rgba(128, 128, 128, 0.2);
+
+<style scoped>
+.param-info {
+  padding: 20px 15px;
+  font-size: 14px;
+  border-bottom: 5px solid #f2f5f8;
 }
-.params_rule,
-.params_set {
-  border-bottom: 0.1rem solid rgba(128, 128, 128, 0.5);
-  border-collapse: collapse; /* 可以合并邻近的边框，且可以让tr显示出边框 */
-  margin: 0 auto;
-  margin-bottom: 0.42rem;
-  width: 13.568rem;
+
+.param-info table {
+  width: 100%;
+  /* border-collapse: collapse; */
 }
-.params_rule tr,
-.params_set tr {
-  border-bottom: 0.04rem solid rgba(128, 128, 128, 0.5);
+
+.param-info table tr {
+  height: 42px;
 }
-.params_rule th {
-  text-align: left;
-  padding-right: 1rem;
-  white-space: nowrap;
+
+.param-info table tr td {
+  border-bottom: 1px solid rgba(100, 100, 100, 0.1);
 }
-.params_rule td {
-  padding: 0.5rem;
+
+.info-param-key {
+  /*当value的数据量比较大的时候, 会挤到key,所以给一个固定的宽度*/
+  width: 80px;
 }
-.params_set th {
-  text-align: left;
-  padding: 0.5rem 3.5rem 0.5rem 0rem;
-  white-space: nowrap;
+
+.param-value {
+  color: #eb4868;
 }
-.params_set td {
-  color: var(--color-high-text);
-}
-.info_img img {
+
+.info-img img {
   width: 100%;
 }
 </style>

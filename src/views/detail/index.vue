@@ -174,7 +174,7 @@ export default {
     return {
       iid: null,
       //顶部轮播图的数据
-      topImages,
+      topImages: [],
       goods: {},
       shop: {},
       detailInfo: {},
@@ -191,53 +191,88 @@ export default {
     //ijw0sr2
     //保存商品id
     this.iid = this.$route.params.iid;
+    console.log(this.$route.params.iid);
     //根据商品id获取商品的信息
-    getDetailData("ijw0sr2").then(res => {
-      console.log(res);
+    getDetailData(this.iid).then(Res => {
+      console.log(Res, "detail");
+      if (Res.status) {
+        console.log("p");
+        const data = Res.result;
+        //获取顶部轮播
+        this.topImages = data.itemInfo.topImages;
+        //获取商品基本信息
+        this.goods = new Goods(
+          data.itemInfo,
+          data.columns,
+          data.shopInfo.services
+        );
+        //获取店铺信息
+        this.shop = new Shop(data.shopInfo);
+        //获取商品详情信息
+        this.detailInfo = data.detailInfo;
+        //获取参数信息
+        this.paramInfo = new GoodsParam(
+          data.itemParams.info,
+          data.itemParams.rule
+        );
+        //保存评论(如果有)
+        if (data.rate.list) {
+          this.commentInfo = data.rate.list[0];
+        }
+        //推荐数据
+        getDetailRecomment().then(res => {
+          console.log(res, "000");
+          this.recomment = res.data.list;
+        });
+      } else {
+        this.topImages = topImages;
+        this.goods = new Goods(itemInfo, columns, services);
+        this.shop = new Shop(shopInfos);
+        this.detailInfo = {
+          desc: "新款上市",
+          detailImage: {
+            key: "穿着效果",
+            list: [
+              "https://gjusp.alicdn.com/img/img1583208621327-996.jpg@1000y-0ic_100Q.jpg_Q75.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i4/356060330/O1CN01fsp8mo1EJBHolH5LV_!!356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i1/356060330/O1CN018mn9Mo1EJBHwvgOHJ_!!356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i2/356060330/O1CN01qrpoI01EJBHpCoDZF-356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i3/356060330/O1CN013HSeNE1EJBHnV3abn-356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i4/356060330/O1CN01FQpEKR1EJBHrvug8N_!!356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i3/356060330/O1CN018UceCc1EJBHnAJp1m-356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i2/356060330/O1CN01XVo3lt1EJBHrbABJ6-356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i4/356060330/O1CN0186PEWk1EJBHpYHLWG_!!356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i4/356060330/O1CN01l80DqV1EJBHp0JHX9-356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i3/356060330/O1CN01v2dx961EJBHn0T2d6-356060330.jpg_2200x2200Q90s50.jpg_.webp",
+              "https://img.alicdn.com/imgextra/i3/356060330/O1CN01fzZn1A1EJBHpzbV62-356060330.jpg_2200x2200Q90s50.jpg_.webp"
+            ]
+          }
+        };
+        this.paramInfo = new GoodsParam(info, rule);
+        //评论信息
+        if (comment.cRate != 0) {
+          this.commentInfo = comment.Ilist;
+        }
+        //推荐数据
+        getDetailRecomment().then(res => {
+          console.log(res, "000");
+          let ram = getRandomNum(15, 25);
+          for (let i = 0; i < ram; i++) {
+            let srcNum = getRandomNum(0, 7);
+            this.recomment.push({
+              title: `列表${i + 1}我测试的数据`,
+              src: srcList[srcNum],
+              price: ram * 10,
+              cfav: getRandomNum(10, 50),
+              iid: this.recomment.length + i
+            });
+          }
+        });
+      }
+
       //获取顶部的图片的轮播图 已做
       // console.log(this.topImages);4
-      this.goods = new Goods(itemInfo, columns, services);
-      this.shop = new Shop(shopInfos);
-      this.detailInfo = {
-        desc: "新款上市",
-        key: "穿着效果",
-        list: [
-          "https://gjusp.alicdn.com/img/img1583208621327-996.jpg@1000y-0ic_100Q.jpg_Q75.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i4/356060330/O1CN01fsp8mo1EJBHolH5LV_!!356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i1/356060330/O1CN018mn9Mo1EJBHwvgOHJ_!!356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i2/356060330/O1CN01qrpoI01EJBHpCoDZF-356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i3/356060330/O1CN013HSeNE1EJBHnV3abn-356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i4/356060330/O1CN01FQpEKR1EJBHrvug8N_!!356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i3/356060330/O1CN018UceCc1EJBHnAJp1m-356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i2/356060330/O1CN01XVo3lt1EJBHrbABJ6-356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i4/356060330/O1CN0186PEWk1EJBHpYHLWG_!!356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i4/356060330/O1CN01l80DqV1EJBHp0JHX9-356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i3/356060330/O1CN01v2dx961EJBHn0T2d6-356060330.jpg_2200x2200Q90s50.jpg_.webp",
-          "https://img.alicdn.com/imgextra/i3/356060330/O1CN01fzZn1A1EJBHpzbV62-356060330.jpg_2200x2200Q90s50.jpg_.webp"
-        ]
-      };
-      this.paramInfo = new GoodsParam(info, rule);
-      //评论信息
-      if (comment.cRate != 0) {
-        this.commentInfo = comment.Ilist;
-      }
-      //推荐数据
-      getDetailRecomment().then(res => {
-        console.log(res, "000");
-        let ram = getRandomNum(15, 25);
-        for (let i = 0; i < ram; i++) {
-          // console.log(ram);
-          let srcNum = getRandomNum(0, 7);
-          this.recomment.push({
-            title: `列表${i + 1}我测试的数据`,
-            src: srcList[srcNum],
-            price: ram * 10,
-            cfav: getRandomNum(10, 50),
-            iid: this.recomment.length + i
-          });
-        }
-        // console.log(this.recomment, "??????");
-      });
+
       this.getThemeTopY = debounce(() => {
         this.themeTopYs = [];
         this.themeTopYs.push(0);

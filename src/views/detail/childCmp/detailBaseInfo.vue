@@ -9,18 +9,17 @@
     <div class="info-other">
       <span>{{ goods.columns[0] }}</span>
       <span>{{ goods.columns[1] }}</span>
-      <span>{{ goods.columns[2] }}</span>
+      <span>{{ goods.services[goods.services.length - 1].name }}</span>
+      <!-- <span>{{ goods.columns[2] }}</span> -->
     </div>
     <div class="info-service">
       <span
         class="info-service-item"
-        v-for="index in goods.services.length"
+        v-for="index in goods.services.length - 1"
         :key="index"
       >
         <img :src="goods.services[index - 1].icon" />
-        <span>
-          {{ goods.services[index - 1].name }}
-        </span>
+        <span>{{ goods.services[index - 1].name }}</span>
       </span>
     </div>
   </div>
@@ -98,14 +97,16 @@ export default {
     .info-service-item {
       display: flex;
       align-items: center;
-      font-size: 12px;
+      font-size: 15px;
       img {
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
+        position: relative;
+        // top: 2px;
       }
-      .span {
+      span {
         font-size: 13px;
-        color: #333;
+        color: #333333;
       }
     }
   }

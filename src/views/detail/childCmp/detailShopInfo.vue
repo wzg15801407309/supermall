@@ -31,7 +31,7 @@
         </table>
       </div>
     </div>
-    <div class="shop-down">
+    <div class="shop-bottom">
       <div class="enter-shop">进店逛逛</div>
     </div>
   </div>
@@ -146,19 +146,17 @@ export default {
       }
     }
   }
-  .shop-down {
-    padding-top: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .shop-bottom {
     text-align: center;
-    line-height: 25px;
+    margin-top: 10px;
     .enter-shop {
-      width: 120px;
-      height: 25px;
-      font-size: 13px;
-      color: #333333;
+      display: inline-block;
+      font-size: 14px;
       background-color: #f2f5f8;
+      width: 150px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
       border-radius: 10px;
     }
   }

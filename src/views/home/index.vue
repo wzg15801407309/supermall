@@ -123,26 +123,33 @@ export default {
       getHomeMultidata().then(res => {
         this.banner = res.data.banner.list;
         this.recommend = res.data.recommend.list;
-        window.console.log(res, "99999999999");
+        console.log(res, "banner");
       });
     },
     getHomeGoodsList(type) {
       const page = this.goods[type].page + 1;
       getHomeGoods(type, page).then(res => {
-        window.console.log(res, "88888888889");
-        //有数据的处理方式
-        // this.goods[type].list.push(...res.data.list);
-        let ram = getRandomNum(25, 35);
-        for (let i = 0; i < ram; i++) {
-          // console.log(ram);
-          let srcNum = getRandomNum(0, 7);
-          this.goods[type].list.push({
-            title: `${type}列表${i + 1}我测试的数据`,
-            src: this.srcList[srcNum],
-            price: ram * 10,
-            cfav: getRandomNum(10, 50),
-            iid: this.goods[type].list.length + i
-          });
+        console.log(res, "goodslist");
+        if (res.success) {
+          // console.log("90");
+          //有数据的处理方式
+          this.goods[type].list.push(...res.data.list);
+        } else {
+          let ram = getRandomNum(25, 35);
+          for (let i = 0; i < ram; i++) {
+            // console.log(ram);
+            let srcNum = getRandomNum(0, 7);
+            this.goods[type].list.push({
+              title: `${type}列表${i + 1}我测试的数据`,
+              show: {
+                img: this.srcList[srcNum]
+              },
+              // src: this.srcList[srcNum],
+              price: ram * 10,
+              cfav: getRandomNum(10, 50),
+              iid: this.goods[type].list.length + i
+            });
+          }
         }
 
         this.goods[type].page += 1;

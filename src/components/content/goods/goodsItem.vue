@@ -1,7 +1,9 @@
 <template>
   <div class="goods-item" @click="itemClick">
     <!-- <img :src="goodsitem.src" @load="imageLoad" /> -->
-    <img v-lazy="goodsitem.src" @load="imageLoad" />
+    <!-- <img v-lazy="goodsitem.src" @load="imageLoad" /> -->
+    <!-- 接口修改后数据改变了 -->
+    <img v-lazy="showImg" @load="imageLoad" />
     <div class="goods-info">
       <p>{{ goodsitem.title }}</p>
       <span class="price">{{ goodsitem.price }}</span>
@@ -26,7 +28,13 @@ export default {
     return {};
   },
   watch: {},
-  computed: {},
+  computed: {
+    showImg() {
+      return this.goodsitem.show
+        ? this.goodsitem.show.img
+        : this.goodsitem.image;
+    }
+  },
   methods: {
     imageLoad() {
       this.$bus.$emit("itemImageLoad");
@@ -34,6 +42,7 @@ export default {
     },
     itemClick() {
       // console.log('详情页面');
+      console.log(this.goodsitem.iid);
       this.$router.push("/detail/" + this.goodsitem.iid);
     }
   },
@@ -49,6 +58,8 @@ export default {
   position: relative;
   img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-radius: 5px;
   }
   .goods-info {
@@ -68,17 +79,14 @@ export default {
       color: var(--color-high-text);
       margin-right: 20px;
     }
-    .collect {
-      position: relative;
-      &::before {
-        content: "";
-        position: absolute;
-        left: -15px;
-        top: -1px;
-        width: 14px;
-        height: 14px;
-        background: url("~assets/common/xingxing.png") 0 0/14px 14px;
-      }
+    .collect::before {
+      content: "";
+      position: absolute;
+      left: -15px;
+      top: -1px;
+      width: 14px;
+      height: 14px;
+      background: url("~assets/common/collect.svg") 0 0/14px 14px;
     }
   }
 }
